@@ -45,5 +45,5 @@ To run this project, you must have the following pre-configured in your AWS acco
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/Tanmay7007/Cadent.git](https://github.com/Tanmay7007/Cadent.git)
+   git clone [https://github.com/Tanmay7007/Cadent.git]
    cd CADENT
