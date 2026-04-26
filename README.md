@@ -10,21 +10,21 @@ Traditional auto-scalers are "blind"—they scale infrastructure based purely on
 
 CADENT replaces this blind logic with an AI-driven **Split Architecture**. By leveraging a Random Forest Machine Learning model, CADENT continuously analyzes bivariate AWS telemetry (CPU Utilization and Network Traffic) to differentiate legitimate viral web surges from malicious, CPU-bound insider threats, triggering serverless mitigation only when mathematically justified.
 
-## 🧠 System Architecture
+## System Architecture
 
 CADENT utilizes a **Split Architecture** to decouple heavy Machine Learning orchestration from the live cloud environment:
 1. **Local Command Center:** A Streamlit dashboard that ingests live AWS CloudWatch metrics, runs the Random Forest `.pkl` model, and provides a UI for attack team simulations.
 2. **Dual-Vector Simulation:** Uses `Locust` to generate benign web traffic and `stress-ng` to simulate internal CPU-stress malware.
 3. **Serverless Cloud Mitigation:** When the local AI detects a Critical Threat, it fires an authenticated API payload to an **AWS Lambda** function. Lambda utilizes `boto3` to clone a Golden AMI, boot a backup EC2 instance, and seamlessly register it to the Application Load Balancer (ALB).
 
-## 📂 Repository Structure
+## Repository Structure
 
 * `app.py`: The Streamlit Command Center and ML inference engine.
 * `lambda_function.py`: The serverless `boto3` mitigation script deployed to AWS Lambda.
 * `model.pkl`: The serialized Random Forest Classifier.
 * `locustfile.py`: The traffic generation script for simulating benign public web load.
 
-## ⚙️ Prerequisites
+## Prerequisites
 
 **Local Environment:**
 * Python 3.8+
@@ -41,7 +41,7 @@ To run this project, you must have the following pre-configured in your AWS acco
    * `elasticloadbalancing:RegisterTargets`
    * `iam:PassRole` (Critical for attaching an instance profile to the new clone).
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 1. **Clone the repository:**
    ```bash
