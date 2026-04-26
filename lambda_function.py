@@ -28,7 +28,7 @@ def lambda_handler(event, context):
         new_instance_id = run_response['Instances'][0]['InstanceId']
         print(f"Successfully launched clone: {new_instance_id}")
         
-        # --- THE FIX: WAIT FOR SERVER TO BOOT ---
+        # ---  WAIT FOR SERVER TO BOOT ---
         print("Waiting for the server hardware to turn on...")
         waiter = ec2.get_waiter('instance_running')
         waiter.wait(InstanceIds=[new_instance_id])
