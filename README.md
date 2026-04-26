@@ -47,3 +47,48 @@ To run this project, you must have the following pre-configured in your AWS acco
    ```bash
    git clone [https://github.com/Tanmay7007/Cadent.git]
    cd CADENT
+   
+2. **Install dependencies:**
+   ```bash
+   pip install streamlit boto3 scikit-learn pandas locust
+
+3. **Configure AWS Variables:**
+
+   * Open lambda_function.py and update the AMI_ID, SUBNET_ID, SECURITY_GROUP_ID, and TARGET_GROUP_ARN with your specific AWS environment values.
+   * Update app.py with your Master EC2 INSTANCE_ID for CloudWatch metric ingestion.
+
+4. **Deploy the Lambda Function:**
+   * Zip the lambda_function.py file.
+   * Upload it to the AWS Lambda console.
+   * Ensure the Lambda function's execution role has the required IAM permissions listed in the prerequisites.
+
+## Usage Instructions
+Step 1: **Start Benign Traffic Simulation**
+   * Open a terminal and start Locust to simulate normal user traffic hitting your ALB:
+
+   ```bash
+   locust -f locustfile.py --host=http://YOUR_ALB_DNS_NAME.com
+```
+   * Navigate to http://localhost:8089 to start the swarm.
+
+
+Step 2: **Launch the Command Center**
+   * Open a second terminal and start the Streamlit dashboard:
+
+```bash
+streamlit run app.py
+```
+or
+```bash
+python -m streamlit run app.py
+```
+
+Step 3: **Simulate an Attack & Observe Mitigation**
+   * From the Streamlit dashboard, monitor the live CPU and Network graphs.
+   * Initiate a stress test (e.g., executing stress-ng --cpu 4 on the Master EC2 instance).
+   * Watch as the Random Forest model detects the "High CPU + Low Network" anomaly (State 2: Critical Threat).
+   * The dashboard will automatically trigger the AWS Lambda function.
+   * Verify in your AWS Console that a new EC2 clone has been provisioned and registered to your ALB Target Group seamlessly.
+
+## Disclaimer
+This project is designed for educational and architectural demonstration purposes. Running automated load generation (Locust) and infrastructure scaling scripts in an active AWS environment will incur real AWS billing charges. Always ensure you destroy your EC2 instances and ALBs after testing to prevent runaway costs.
